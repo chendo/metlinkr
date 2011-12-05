@@ -17,5 +17,9 @@ describe Metlinkr::Step do
     it "parses the mode of transport" do
       subject.method.should == :tram
     end
+
+    it "parses the origin name" do
+      subject.origin.should == "Stop 29 - Barkers Rd/High St (Kew)"
+    end
   end
 end

@@ -11,6 +11,7 @@ class Metlinkr
       @row_set = row_set
 
       parse_method
+      parse_origin
 
       self
     end
@@ -22,6 +23,11 @@ class Metlinkr
       when /tram/i
         :tram
       end
+    end
+
+    def parse_origin
+      @origin = @row_set[0].xpath("td/strong/a").first.content
+      @origin.gsub!(/(\d+)-/, 'Stop \1 - ')
     end
   end
 end
