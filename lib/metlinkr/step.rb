@@ -1,6 +1,6 @@
 class Metlinkr
   class Step
-    attr_reader :method, :origin, :destination, :departure_time, :arrival_time, :duration
+    attr_reader :method, :origin, :destination, :departure_time, :arrival_time, :duration, :route
 
     def self.parse(row_set)
       step = new
@@ -13,6 +13,7 @@ class Metlinkr
       parse_method
       parse_origin
       parse_destination
+      parse_route
 
       self
     end
@@ -34,8 +35,12 @@ class Metlinkr
       @destination = clean_stop_name(@row_set[2].xpath("td/a").first.content)
     end
 
+    def parse_route
+      @route = @row_set[1].xpath("td/strong").first.content.strip
+    end
+
     def clean_stop_name(stop)
-      stop.gsub!(/(\d+)-/, 'Stop \1 - ')
+      stop.gsub!(/(\d+)-/, 'Stop \1 - ').strip
     end
   end
 end

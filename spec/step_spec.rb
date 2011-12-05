@@ -25,5 +25,9 @@ describe Metlinkr::Step do
     it "parses the destination name" do
       subject.destination.should == "Stop 19 - North Richmond Railway Station/Victoria St (Richmond)"
     end
+
+    it "parses the route" do
+      subject.route.should == '109 tram towards Port Melbourne'
+    end
   end
 end
