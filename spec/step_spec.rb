@@ -21,5 +21,9 @@ describe Metlinkr::Step do
     it "parses the origin name" do
       subject.origin.should == "Stop 29 - Barkers Rd/High St (Kew)"
     end
+
+    it "parses the destination name" do
+      subject.destination.should == "Stop 19 - North Richmond Railway Station/Victoria St (Richmond)"
+    end
   end
 end

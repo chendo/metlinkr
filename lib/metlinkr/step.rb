@@ -12,6 +12,7 @@ class Metlinkr
 
       parse_method
       parse_origin
+      parse_destination
 
       self
     end
@@ -26,8 +27,15 @@ class Metlinkr
     end
 
     def parse_origin
-      @origin = @row_set[0].xpath("td/strong/a").first.content
-      @origin.gsub!(/(\d+)-/, 'Stop \1 - ')
+      @origin = clean_stop_name(@row_set[0].xpath("td/strong/a").first.content)
+    end
+
+    def parse_destination
+      @destination = clean_stop_name(@row_set[2].xpath("td/a").first.content)
+    end
+
+    def clean_stop_name(stop)
+      stop.gsub!(/(\d+)-/, 'Stop \1 - ')
     end
   end
 end
