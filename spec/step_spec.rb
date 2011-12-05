@@ -38,5 +38,8 @@ describe Metlinkr::Step do
       subject.arrival_time.should == "8:48pm"
     end
 
+    it "parses the duration" do
+      subject.duration.should == "9 min"
+    end
   end
 end

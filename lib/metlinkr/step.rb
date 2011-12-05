@@ -16,6 +16,7 @@ class Metlinkr
       parse_route
       parse_departure_time
       parse_arrival_time
+      parse_duration
 
       self
     end
@@ -48,6 +49,11 @@ class Metlinkr
     def parse_arrival_time
       # Why the FUCK is that div there?
       @arrival_time = clean_time(@row_set[2].xpath("td/div/span").first.content)
+    end
+
+    def parse_duration
+      @row_set[1].xpath("td").last.content.match(/Time (\d+ min)/)
+      @duration = $1
     end
 
     def clean_stop_name(stop)
