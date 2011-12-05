@@ -14,6 +14,8 @@ class Metlinkr
       parse_origin
       parse_destination
       parse_route
+      parse_departure_time
+      parse_arrival_time
 
       self
     end
@@ -39,8 +41,21 @@ class Metlinkr
       @route = @row_set[1].xpath("td/strong").first.content.strip
     end
 
+    def parse_departure_time
+      @departure_time = clean_time(@row_set[0].xpath("td/span").first.content)
+    end
+
+    def parse_arrival_time
+      # Why the FUCK is that div there?
+      @arrival_time = clean_time(@row_set[2].xpath("td/div/span").first.content)
+    end
+
     def clean_stop_name(stop)
       stop.gsub!(/(\d+)-/, 'Stop \1 - ').strip
+    end
+
+    def clean_time(time)
+      time.gsub(/^.*,/, '').gsub(' ', '').strip
     end
   end
 end

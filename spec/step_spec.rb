@@ -29,5 +29,14 @@ describe Metlinkr::Step do
     it "parses the route" do
       subject.route.should == '109 tram towards Port Melbourne'
     end
+
+    it "parses the departure time" do
+      subject.departure_time.should == "8:39pm"
+    end
+
+    it "parses the arrival time" do
+      subject.arrival_time.should == "8:48pm"
+    end
+
   end
 end
