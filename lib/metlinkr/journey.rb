@@ -10,6 +10,12 @@ class Metlinkr
 
       rows = doc.xpath("//table[@text-align='top']/tr")
 
+      rows = rows.to_a.reject do |row|
+        # Reject the hidden ones
+        klass = row.attributes['class'].value rescue ""
+        klass =~ /addinfo|jpText/
+      end
+
       rows.shift # Get rid of header row
 
       if rows.length % 3 != 0
