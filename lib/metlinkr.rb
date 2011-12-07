@@ -36,8 +36,6 @@ class Metlinkr
 
     body = results.body
 
-    match = body.match(%r|<tr class="p4">(.*?)</tr>|)
-
     doc = Nokogiri::HTML(body)
 
     link = doc.search('tr.p4 td.dontprint a').first

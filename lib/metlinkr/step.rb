@@ -67,7 +67,7 @@ class Metlinkr
     end
 
     def clean_stop_name(stop)
-      stop.gsub(/^(From Stop)|(Get off at( stop)?)|(To)\b/i, '').gsub(/(\d+)-/, 'Stop \1 - ').strip
+      stop.gsub(/^(From Stop)|(Get off at( stop)?)|(To)\b/i, '').gsub(/(\d+)-/, 'Stop \1 - ').gsub(/[^ -z]+/, ' ').strip
     end
 
     def clean_time(time)
