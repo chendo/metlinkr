@@ -18,37 +18,47 @@ class Metlinkr
       parse_arrival_time
       parse_duration
 
+      @row_set = nil
+
       self
     end
 
     protected
 
     def parse_method
-      @method = case @row_set[0].xpath("//td[1]/img").first.attributes['alt'].value
-      when /tram/i
+      @method = case @row_set[0].xpath("td[1]/img").first.attributes['alt'].value
+      when /\btram\b/i
         :tram
+      when /\btrain\b/i
+        :train
+      when /\bbus\b/i
+        :bus
+      when /\bwalk\b/i
+        :walk
+      else
+        nil
       end
     end
 
     def parse_origin
-      @origin = clean_stop_name(@row_set[0].xpath("td/strong/a").first.content)
+      @origin = clean_stop_name(@row_set[0].xpath("td")[3].content)
     end
 
     def parse_destination
-      @destination = clean_stop_name(@row_set[2].xpath("td/a").first.content)
+      @destination = clean_stop_name(@row_set[2].xpath("td")[3].content)
     end
 
     def parse_route
-      @route = @row_set[1].xpath("td/strong").first.content.strip
+      @route = @row_set[1].xpath("td/strong").first.content.strip rescue nil
     end
 
     def parse_departure_time
-      @departure_time = clean_time(@row_set[0].xpath("td/span").first.content)
+      @departure_time = clean_time(@row_set[0].xpath("td/span").first.content) rescue nil
     end
 
     def parse_arrival_time
       # Why the FUCK is that div there?
-      @arrival_time = clean_time(@row_set[2].xpath("td/div/span").first.content)
+      @arrival_time = clean_time(@row_set[2].xpath("td/div/span").first.content) rescue nil
     end
 
     def parse_duration
@@ -57,7 +67,7 @@ class Metlinkr
     end
 
     def clean_stop_name(stop)
-      stop.gsub!(/(\d+)-/, 'Stop \1 - ').strip
+      stop.gsub(/^(From Stop)|(Get off at( stop)?)|(To)\b/i, '').gsub(/(\d+)-/, 'Stop \1 - ').strip
     end
 
     def clean_time(time)
