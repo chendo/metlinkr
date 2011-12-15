@@ -12,7 +12,7 @@ class Metlinkr
 
   end
 
-  def route(from, to, options = {})
+  def route(from, to, options = {:methods => :all})
     agent = Mechanize.new
     agent.user_agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; chromeframe/12.0.742.112)'
     page = agent.get(START_URL)
@@ -32,6 +32,9 @@ class Metlinkr
 
     f.name_origin = from
     f.name_destination = to
+
+    select_methods(f, options[:methods])
+
     results = f.click_button
 
     body = results.body
@@ -47,6 +50,29 @@ class Metlinkr
     Journey.parse(body)
   end
 
+  private
+
+  METHOD_MAPPING = {
+    :train        => 'inclMOT_1',
+    :tram         => 'inclMOT_4',
+    :bus          => 'inclMOT_5',
+    :vline        => 'inclMOT_0',
+    :regional_bus => 'inclMOT_6',
+    :skybus       => 'inclMOT_3'
+  }
+
+  ALL_METHODS = [:tram, :train, :bus, :vline, :regional_bus, :skybus]
+
+  def select_methods(form, methods = :all)
+    if methods == :all
+      methods = ALL_METHODS
+    end
+
+    (ALL_METHODS - [methods].flatten).each do |method|
+      form.checkbox_with(:name => METHOD_MAPPING[method]).uncheck
+    end
+
+  end
 end
 
 $LOAD_PATH << File.dirname(__FILE__)
