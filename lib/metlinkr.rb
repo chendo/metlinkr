@@ -12,7 +12,7 @@ class Metlinkr
 
   end
 
-  def route(from, to, options = {:methods => :all})
+  def route(from, to, options = {:methods => :all, :ignore_earlier_journey => true, :limit => 1})
     agent = Mechanize.new
     agent.user_agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; chromeframe/12.0.742.112)'
     page = agent.get(START_URL)
@@ -41,13 +41,16 @@ class Metlinkr
 
     doc = Nokogiri::HTML(body)
 
-    link = doc.search('tr.p4 td.dontprint a').first
+    links = doc.search('tr.p4 td.dontprint a, tr.p2 td.dontprint a')
 
-    href = link.attributes['href'].value
+    links.shift if options[:ignore_earlier_journey]
 
-    body = agent.get(href).body
-
-    Journey.parse(body)
+    links = links.slice(0, options[:limit])
+    links.map do |link|
+      href = link.attributes['href'].value
+      body = agent.get(href).body
+      Journey.parse(body)
+    end
   end
 
   private
