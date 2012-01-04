@@ -9,15 +9,12 @@ class Metlinkr
   end
 
   def initialize
-
+    agent.user_agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; chromeframe/12.0.742.112)'
   end
 
   def route(from, to, options = {:methods => :all, :ignore_earlier_journey => true, :limit => 1})
-    agent = Mechanize.new
-    agent.user_agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; chromeframe/12.0.742.112)'
     page = agent.get(START_URL)
 
-    require 'pp'
     f = page.form('tripRequest')
 
     # Shitty hack for forcing address
@@ -48,12 +45,19 @@ class Metlinkr
     links = links.slice(0, options[:limit])
     links.map do |link|
       href = link.attributes['href'].value
-      body = agent.get(href).body
-      Journey.parse(body)
+      fetch_and_parse_journey_from_href(href)
     end
   end
 
   private
+
+  def agent
+    @agent ||= Mechanize.new
+  end
+
+  def fetch_and_parse_journey_from_href(href)
+    Journey.parse(agent.get(href).body)
+  end
 
   METHOD_MAPPING = {
     :train        => 'inclMOT_1',
