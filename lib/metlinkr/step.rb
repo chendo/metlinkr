@@ -71,7 +71,7 @@ class Metlinkr
     end
 
     def clean_time(time)
-      time.gsub(/^.*,/, '').gsub(' ', '').strip
+      time.gsub(/^.*,/, '').gsub(/[^0-9a-z:]/, '').strip
     end
   end
 end
