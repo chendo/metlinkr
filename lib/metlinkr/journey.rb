@@ -7,7 +7,7 @@ class Metlinkr
 
     START_URL = "http://jp.metlinkmelbourne.com.au/metlink/XSLT_TRIP_REQUEST2?language=en&itdLPxx_view=advanced"
 
-    attr_reader :from, :to, :options, :trips
+    attr_reader :from, :to, :options, :trips, :url
 
     def initialize(from, to, options = nil)
       @from = from
@@ -44,6 +44,8 @@ class Metlinkr
       body = results.body
 
       doc = Nokogiri::HTML(body)
+
+      @from, @to = doc.search('div.jpHeaderBoxInner div.jpText').map { |node| node.content.gsub(/[^a-zA-Z\(\) \d-]/, '').strip }
 
       links = doc.search('tr.p4 td.dontprint a, tr.p2 td.dontprint a')
 

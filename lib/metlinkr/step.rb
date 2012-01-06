@@ -62,8 +62,7 @@ class Metlinkr
     end
 
     def parse_duration
-      @row_set[1].xpath("td").last.content.match(/Time (\d+ min)/)
-      @duration = $1
+      @duration = @row_set[1].xpath("td").last.content.match(/(\d+ min)/)[1]
     end
 
     def clean_stop_name(stop)
