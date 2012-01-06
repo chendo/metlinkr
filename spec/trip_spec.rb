@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe Metlinkr::Journey do
+describe Metlinkr::Trip do
   let(:raw_shitty_html) do
     File.read(File.dirname(__FILE__) + "/fixtures/multiple_journey.html")
   end
 
   subject do
-    Metlinkr::Journey.parse(raw_shitty_html)
+    Metlinkr::Trip.parse(raw_shitty_html)
   end
 
-  it "parses journey effectively" do
+  it "parses Trip effectively" do
     subject.steps.length.should == 7
 
     step = subject.steps.first
