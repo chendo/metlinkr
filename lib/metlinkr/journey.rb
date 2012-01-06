@@ -9,10 +9,10 @@ class Metlinkr
 
     attr_reader :from, :to, :options, :trips
 
-    def initialize(from, to, options = {:methods => :all, :ignore_earlier_trip => true, :limit => 1})
+    def initialize(from, to, options = nil)
       @from = from
       @to = to
-      @options = options
+      @options = options || {:methods => :all, :ignore_earlier_trip => true, :limit => 1}
     end
 
     def plan
